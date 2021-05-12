@@ -15,12 +15,24 @@ var TableModel = /** @class */ (function () {
   };
   TableModel.prototype.SetSorting = function (sort) {
     switch (sort) {
-      case "time-asc":
-        alert("Implement Sort By Time ASC");
+      case "time-asc": {
+        this._predictions = this._predictions.sort((a, b) =>
+          new Date(a.Time).toUTCString() > new Date(b.Time).toUTCString()
+            ? 1
+            : -1
+        );
+        this.SetPage(this.Page());
         break;
-      case "time-desc":
-        alert("Implement Sort By Time DESC");
+      }
+      case "time-desc": {
+        this._predictions = this._predictions.sort((a, b) =>
+          new Date(a.Time).toUTCString() < new Date(b.Time).toUTCString()
+            ? 1
+            : -1
+        );
+        this.SetPage(this.Page());
         break;
+      }
     }
     this.SortBy(sort);
   };

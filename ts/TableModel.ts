@@ -26,11 +26,21 @@ class TableModel {
   public SetSorting(sort: string) {
     switch (sort) {
       case "time-asc":
-        alert("Implement Sort By Time ASC");
+        this._predictions = this._predictions.sort((a, b) =>
+          new Date(a.Time).toUTCString() > new Date(b.Time).toUTCString()
+            ? 1
+            : -1
+        );
+        this.SetPage(this.Page());
         break;
 
       case "time-desc":
-        alert("Implement Sort By Time DESC");
+        this._predictions = this._predictions.sort((a, b) =>
+          new Date(a.Time).toUTCString() < new Date(b.Time).toUTCString()
+            ? 1
+            : -1
+        );
+        this.SetPage(this.Page());
         break;
     }
     this.SortBy(sort);
@@ -42,14 +52,14 @@ class TableModel {
   }
 
   public SetPage(page) {
-    alert("Implement Set Page Method (" + page + ")");
-
-    /**
-     * This method builds the viewable rows of the table, by creating an array of row elements and placing it into
-     * the visible rows observable property
-     */
-    this.VisibleRows([new RowModel(this._predictions[0])]);
-
+    let temp = this._predictions.map((d) => new RowModel(d));
+    const start = (page - 1) * this.PageSize;
+    const end =
+      this.PageSize !== 1.7976931348623157
+        ? start + this.PageSize
+        : temp.length;
+    temp = temp.slice(start, end);
+    this.VisibleRows(temp);
     this.Page(page);
   }
 }
